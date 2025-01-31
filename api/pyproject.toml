@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "api"
+version = "0.1.0"
+description = ""
+authors = ["Muhsin Kılıç <kmuhsinn@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.1.5"
+djangorestframework = "^3.15.2"
+psycopg2-binary = "^2.9.10"
+python-decouple = "^3.8"
+drf-yasg = "^1.21.8"
+djangorestframework-simplejwt = "^5.4.0"
+logging = "^0.4.9.6"
+ruff = "^0.9.3"
+timedelta = "^2020.12.3"
+django-cors-headers = "^4.6.0"
+django-filter = "^24.3"
+uvicorn = "^0.34.0"
+channels = "^4.2.0"
+channels-redis = "^4.2.1"
+daphne = "^4.1.2"
+twisted = {extras = ["http2", "tls"], version = "^24.11.0"}
+pillow = "^11.1.0"
+ipdb = "^0.13.13"
+pydantic = "^2.10.6"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.0"
+black = "^24.10.0"
+flake8 = "^7.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

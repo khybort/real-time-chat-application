@@ -1,0 +1,138 @@
+services:
+  db:
+    image: postgres:15
+    container_name: db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: chat
+      POSTGRES_PASSWORD: chat
+      POSTGRES_DB: chatdb
+    networks:
+      - app-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6
+    container_name: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - app-network
+
+  api-dev:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+      target: development
+    tty: true
+    stdin_open: true
+    container_name: api-dev
+    env_file:
+      - ./api/.env
+    command: >
+      bash -c "
+      ./wait-for-it.sh db:5432 --timeout=10 -- &&
+      poetry run python manage.py makemigrations --no-input &&
+      poetry run python manage.py migrate --no-input &&
+      poetry run python manage.py createsuperuser --noinput --username=admin --email=admin@example.com || true &&
+      poetry run daphne -b 0.0.0.0 -p 8000 config.asgi:application
+      "
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./api:/app
+      - ./api/.env.development:/app/.env
+      - ./api/staticfiles:/app/staticfiles
+    networks:
+      - app-network
+    ports:
+      - "8000:8000"
+    profiles:
+      - development
+  
+  api-prod:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+      target: production
+    container_name: api-prod
+    env_file:
+      - ./api/.env.production
+    command: >
+      bash -c "
+      ./wait-for-it.sh db:5432 --timeout=20 -- &&
+      poetry run python manage.py makemigrations --no-input &&
+      poetry run python manage.py migrate --no-input &&
+      poetry run python manage.py createsuperuser --noinput --username=admin --email=admin@example.com || true &&
+      poetry run daphne -b 0.0.0.0 -p 8000 config.asgi:application
+      "
+    depends_on:
+      - db
+      - redis
+    networks:
+      - app-network
+    ports:
+      - "8000:8000"
+    profiles:
+      - production
+    restart: always
+
+  ui-dev:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+      target: development
+    container_name: chat-ui-dev
+    depends_on:
+      - api-dev
+    profiles:
+      - development
+    command:
+
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./ui:/app
+      - /app/node_modules
+      - ./ui/.env.development:/app/.env
+    env_file:
+      - ./ui/.env
+    networks:
+      - app-network
+
+  ui-prod:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+      target: production
+    container_name: chat-ui-prod
+    depends_on:
+      - api-prod
+    profiles:
+      - production
+    ports:
+      - "80:80"
+    volumes:
+      - ./ui:/app
+      - ./ui/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ui/.env.production:/app/.env
+    env_file:
+      - ./ui/.env
+    networks:
+      - app-network
+    restart: always
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
