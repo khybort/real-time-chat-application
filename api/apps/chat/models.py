@@ -9,7 +9,7 @@ from apps.core.base_model import BaseModel
 
 
 class Room(BaseModel):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True, db_index=True)
     members = models.ManyToManyField(User, blank=True)
     
     class Meta:

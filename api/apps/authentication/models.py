@@ -4,7 +4,7 @@ from django.db import models
 from apps.authentication.domain.entities.user_entity import UserEntity
 
 class User(AbstractUser):
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, db_index=True)
     is_active = models.BooleanField(default=True)
     date_of_birth = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
