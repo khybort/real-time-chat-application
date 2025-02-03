@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import API from '../services/api';
+import React, { useState, useEffect } from "react";
+import API from "../services/api";
 
 interface SidebarProps {
   activeRoom: string;
@@ -13,7 +13,6 @@ interface Room {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ activeRoom, changeRoom }) => {
-
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,13 +21,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activeRoom, changeRoom }) => {
   useEffect(() => {
     const fetchRooms = async () => {
       setLoading(true);
-      
+
       try {
-        const response = await API.get('/chat/rooms/');
+        const response = await API.get("/chat/rooms/");
         const data = await response.data;
         setRooms(Array.isArray(data) ? data : []);
       } catch (error) {
-        console.error('Error fetching rooms:', error);
+        console.error("Error fetching rooms:", error);
       } finally {
         setLoading(false);
       }
@@ -40,10 +39,9 @@ const Sidebar: React.FC<SidebarProps> = ({ activeRoom, changeRoom }) => {
     if (!newRoomName.trim()) return;
 
     try {
-      const response = await API.post('/chat/rooms/', {
+      const response = await API.post("/chat/rooms/", {
         name: newRoomName,
-      }
-      );
+      });
       if (response.data) {
         const data: Room = response.data;
         setRooms((prevRooms) => [...prevRooms, data]);
@@ -51,10 +49,10 @@ const Sidebar: React.FC<SidebarProps> = ({ activeRoom, changeRoom }) => {
         setIsModalOpen(false);
         setNewRoomName("");
       } else {
-        console.error('Error creating room:', response.statusText);
+        console.error("Error creating room:", response.statusText);
       }
     } catch (error) {
-      console.error('Error creating room:', error);
+      console.error("Error creating room:", error);
     }
   };
 
@@ -69,8 +67,9 @@ const Sidebar: React.FC<SidebarProps> = ({ activeRoom, changeRoom }) => {
             <li
               key={room.name}
               onClick={() => changeRoom(room.name)}
-              className={`cursor-pointer p-2 rounded ${activeRoom === room.name ? 'bg-blue-600' : 'hover:bg-gray-700'
-                }`}
+              className={`cursor-pointer p-2 rounded ${
+                activeRoom === room.name ? "bg-blue-600" : "hover:bg-gray-700"
+              }`}
             >
               {room.name}
             </li>
@@ -90,7 +89,9 @@ const Sidebar: React.FC<SidebarProps> = ({ activeRoom, changeRoom }) => {
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-80">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Create a New Room</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">
+              Create a New Room
+            </h3>
 
             <input
               type="text"

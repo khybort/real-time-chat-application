@@ -20,7 +20,12 @@ const RegisterPage: React.FC = () => {
     const trimmedPassword = password.trim();
     const trimmedConfirmPassword = confirmPassword.trim();
 
-    if (!trimmedUsername || !trimmedEmail || !trimmedPassword || !trimmedConfirmPassword) {
+    if (
+      !trimmedUsername ||
+      !trimmedEmail ||
+      !trimmedPassword ||
+      !trimmedConfirmPassword
+    ) {
       setError("Please fill in all fields.");
       return;
     }
@@ -50,7 +55,9 @@ const RegisterPage: React.FC = () => {
   return (
     <div className="flex items-center justify-center w-screen h-screen bg-gray-100">
       <div className="bg-white w-full max-w-md p-8 shadow-xl rounded-lg">
-        <h1 className="text-2xl font-bold text-gray-700 mb-6 text-center">Register</h1>
+        <h1 className="text-2xl font-bold text-gray-700 mb-6 text-center">
+          Register
+        </h1>
         {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
         {success && (
           <p className="text-green-500 mb-4 text-center">

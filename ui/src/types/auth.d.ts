@@ -5,5 +5,5 @@ export interface LoginResponse {
 export interface User {
   id: number;
   username: string;
-  role: 'user' | 'manager';
+  role: "user" | "manager";
 }

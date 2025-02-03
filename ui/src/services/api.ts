@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
+const API_BASE_URL =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
 
 const API = axios.create({
   baseURL: `${API_BASE_URL}/api`,
@@ -17,7 +18,7 @@ API.interceptors.request.use(
   (error) => {
     console.error("Request error:", error);
     return Promise.reject(error);
-  }
+  },
 );
 
 const logout = () => {
@@ -34,7 +35,7 @@ API.interceptors.response.use(
       const refreshToken = localStorage.getItem("refresh");
       if (refreshToken) {
         try {
-          const response = await API.post('/auth/token/refresh/', {
+          const response = await API.post("/auth/token/refresh/", {
             refresh: refreshToken,
           });
 
@@ -52,7 +53,7 @@ API.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default API;

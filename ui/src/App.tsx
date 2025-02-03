@@ -7,8 +7,8 @@ import RegisterPage from "./pages/RegisterPage";
 
 const App: React.FC = () => {
   return (
-<Router>
-<AuthProvider>
+    <Router>
+      <AuthProvider>
         <Routes>
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -16,8 +16,7 @@ const App: React.FC = () => {
         </Routes>
       </AuthProvider>
     </Router>
-  )
+  );
 };
 
 export default App;
-

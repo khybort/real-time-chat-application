@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import avatar from '../../src/assets/abc.png'
+import React, { useState } from "react";
+import avatar from "../../src/assets/abc.png";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const userData = localStorage.getItem('user');
-const parsedUserData = userData ? JSON.parse(userData) : {};
+  const userData = localStorage.getItem("user");
+  const parsedUserData = userData ? JSON.parse(userData) : {};
   const user = {
-    username: parsedUserData.username || 'Guest',
-    avatarUrl: avatar
+    username: parsedUserData.username || "Guest",
+    avatarUrl: avatar,
   };
 
   const toggleMenu = () => {
@@ -15,10 +15,10 @@ const parsedUserData = userData ? JSON.parse(userData) : {};
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('access');
-    localStorage.removeItem('refresh');
-    localStorage.removeItem('user');
-    window.location.href = '/login';
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
+    localStorage.removeItem("user");
+    window.location.href = "/login";
   };
 
   return (
@@ -32,7 +32,7 @@ const parsedUserData = userData ? JSON.parse(userData) : {};
             alt="Avatar"
             className="w-8 h-8 rounded-full"
           />
-          <span className='text-black'>{user.username}</span>
+          <span className="text-black">{user.username}</span>
         </button>
 
         {isMenuOpen && (
