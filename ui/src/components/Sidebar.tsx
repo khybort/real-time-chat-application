@@ -87,8 +87,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeRoom, changeRoom }) => {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-80">
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div 
+            className="fixed inset-0 bg-black opacity-50"
+            onClick={() => setIsModalOpen(false)}
+          ></div>
+          <div className="bg-white p-6 rounded-lg shadow-lg w-80 z-50">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               Create a New Room
             </h3>
@@ -98,19 +102,20 @@ const Sidebar: React.FC<SidebarProps> = ({ activeRoom, changeRoom }) => {
               value={newRoomName}
               onChange={(e) => setNewRoomName(e.target.value)}
               placeholder="Enter room name"
-              className="w-full p-2 border border-gray-300 text-black rounded mb-4"
+              className="w-full p-2 border border-gray-300 rounded mb-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoFocus
             />
 
             <div className="flex justify-end space-x-2">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-black rounded"
+                className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
               >
                 Cancel
               </button>
               <button
                 onClick={handleCreateRoom}
-                className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-black rounded"
+                className="px-4 py-2 bg-blue-500 text-black rounded hover:bg-blue-600 font-medium"
               >
                 Create
               </button>

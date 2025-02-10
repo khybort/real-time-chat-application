@@ -13,17 +13,24 @@ class ChatHistoryConsumer(BaseConsumer):
         await self.accept()
 
     async def receive(self, text_data):
-        messages = await sync_to_async(self.message_service.get_messages)(room_name=self.room_name)
-        message_list = []
-        for msg in messages:
-           sender = await sync_to_async(self.user_service.get)(id_=msg.user_id) 
-           message_list.append( {
-                'content': msg.content,
-                'sender': sender.username,
-                'room_name': self.room_name,
-            })
-           
-        await self.send(text_data=json.dumps({
-            'type': 'chat_history',
-            'messages': message_list
-        }))
+        try:
+            data = json.loads(text_data)
+            if data.get('type') != 'get_message_history':
+                return
+                
+            messages = await sync_to_async(self.message_service.get_messages)(room_name=self.room_name)
+            message_list = []
+            for msg in messages:
+               sender = await sync_to_async(self.user_service.get)(id_=msg.user_id) 
+               message_list.append({
+                    'message': msg.content,
+                    'sender': sender.username,
+                    'room_name': self.room_name,
+                })
+               
+            await self.send(text_data=json.dumps({
+                'type': 'chat_history',
+                'messages': message_list
+            }))
+        except json.JSONDecodeError:
+            pass
